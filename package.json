@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "generate": "npx react-native-bootsplash generate ./apps.png --background-color #2EE59D --logo-width 100 --assets-path ./src/assets --flavor main"
   },
   "dependencies": {
     "@react-native/new-app-screen": "0.83.1",
@@ -15,6 +16,7 @@
     "@react-navigation/native": "^7.1.28",
     "react": "19.2.0",
     "react-native": "0.83.1",
+    "react-native-bootsplash": "^7.0.2",
     "react-native-safe-area-context": "^5.6.2",
     "react-native-screens": "^4.23.0",
     "react-native-vector-icons": "^10.3.0"
