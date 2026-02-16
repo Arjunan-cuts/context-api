@@ -17,5 +17,6 @@ const LangSLice=createSlice({
     }
 })
 
+
 export const {en,sp}=LangSLice.actions
 export default LangSLice.reducer

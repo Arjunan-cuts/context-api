@@ -9,7 +9,6 @@ export function Wealth() {
     const language=useAppSelector(state=>state.lang.lang);
     return (
         <>
-
             <View style={{
                 flex: 1,
                 backgroundColor: "#E3FEFF",
@@ -27,8 +26,7 @@ export function Wealth() {
                             fontSize: 26,
                             fontWeight: "700"
                         }}>
-                            {language === 'en' ? ' Hi Welcome to Wealth Page !!':'¡Bienvenido a Patrimonio! '}
-                           
+                            {language === 'en' ? ' Hi Welcome to Wealth Page !!':'¡Bienvenido a Patrimonio! '}          
                         </Text>
                     </View>
                 </View>
@@ -45,7 +43,6 @@ export function Wealth() {
                             {language === 'en' ? 'This is the Wealth page where you can track and grow your finances.':'Esta es la página de patrimonio donde puedes seguir y hacer crecer tus finanzas.'}
                         </Text>
                     </View>
-
             </View>
         </>
     )
