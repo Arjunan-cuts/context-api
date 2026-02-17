@@ -1,10 +1,10 @@
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Text, View } from 'react-native';
+import { Text, TouchableOpacity, View } from 'react-native';
 import { Header } from '../Components/Header';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { lanContext } from '../Contexts/LangContext';
 import { useAppSelector } from '../Hooks/reduxHooks';
-
+import GetContacts from '../Services/Contact';
 export function Bills() {
     const language=useAppSelector(state=>state.lang.lang);
     return (
@@ -12,41 +12,13 @@ export function Bills() {
 
             <View style={{
                 flex: 1,
-                backgroundColor: "#E3FEFF",
+                // backgroundColor: "#E3FEFF",
                 paddingHorizontal: 10,
                 justifyContent: "center"
             }}>
-                <View style={{
-                    // height: "90%",
-                    width: "100%",
-                    backgroundColor: "#ACF1C75C",
-                    padding:10
-                }}>
-                    <View>
-                        <Text style={{
-                            fontSize: 26,
-                            fontWeight: "700"
-                        }}>
-                            {language === 'en' ? ' Hi Welcome to Bills Page !!':'¡Bienvenido a Facturas!'}
-                           
-                        </Text>
-                    </View>
+               <GetContacts/> 
                 </View>
-                <View style={{
-                    // height: "90%",
-                    width: "100%",
-                    backgroundColor: "#FCDEF45C",
-                    padding:10
-                }}>
-                        <Text style={{
-                            fontSize: 20,
-                            fontWeight: "300"
-                        }}>
-                            {language === 'en' ? 'TThis is the Bills page where you can manage your payments and expenses.':'Esta es la página de facturas donde puedes administrar tus pagos y gastos.'}
-                        </Text>
-                    </View>
-
-            </View>
+            {/* </View> */}
         </>
     )
 }

@@ -14,6 +14,11 @@ export function Home() {
     const logi=useAppSelector(state=>state.auth.login);
     const language=useAppSelector(state=>state.lang.lang);
     const [contactvisible,setContactVisible]=useState(false);
+    // const [issort,setIssort]=useState(false);
+
+    // const handleSort=()=>{
+    //     setIssort(true);
+    // }
     return (    
         <>
             <View style={{
@@ -55,9 +60,10 @@ export function Home() {
                             {language === 'en' ? 'This is the Home page where you can view and explore content..':'Esta es la página de inicio donde puedes ver y explorar contenido.'}
                         </Text>
                     </View>
-                    <View>
-                        
-                    </View>
+                    <View style={{
+                        flexDirection:"row",
+                        justifyContent:"space-between"
+                    }}>
                     <TouchableOpacity style={{
                         backgroundColor:"#72F7B5",
                         alignSelf:"flex-start",
@@ -70,12 +76,30 @@ export function Home() {
                     >
                         <Text>Contacts</Text>
                     </TouchableOpacity>
+                    <TouchableOpacity style={{
+                        backgroundColor:"#72F7B5",
+                        alignSelf:"flex-start",
+                        padding:10,
+                        borderRadius:20
+                    }}
+                 
+                    >
+                        <Text>sort</Text>
+                    </TouchableOpacity>
+                    </View>
+                    
                     {
                         contactvisible && 
-                         <ScrollView style={{ flex: 1 }}>
+                       
+                            <View style={{
+                                // backgroundColor:"#A0A0A031",
+                                padding:10,
+                                borderRadius:10
+                            }}>
 
                         <GetContacts/>
-                        </ScrollView>
+                            </View>
+                      
                     }
                    
             </View>
