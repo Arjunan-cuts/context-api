@@ -24,7 +24,7 @@ export function Header() {
                
                     <View
                         style={{
-                            height: 50,
+                            height: 40,
                             backgroundColor: "white",
                             width: "100%",
                             elevation: 3,

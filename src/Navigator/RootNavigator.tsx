@@ -3,17 +3,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LangProvider from '../Contexts/LangContext';
 import { Header } from '../Components/Header';
-import { View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 export default function RootNavigator() {
     return (
         <>
             <LangProvider>
-
                 <Header/>
                 <Tab.Navigator
                     screenOptions={({ route }) => ({
+                        
                         tabBarIcon: ({ focused, color, size }) => {
                             let icon = "";
                             let name = route.name;
@@ -32,8 +31,6 @@ export default function RootNavigator() {
                         },
                         tabBarActiveTintColor: '#15547E',
                         tabBarInactiveTintColor: '#617E82',
-                       
-
                     })}
                 >
                     <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
