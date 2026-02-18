@@ -19,7 +19,7 @@ export default function RootNavigator() {
                             let name = route.name;
                             if (name === 'Home') {
                                 icon = focused ? 'home' : 'home-outline'
-                            }else if(name ==='Bills'){
+                            }else if(name ==='Contacts'){
                                 icon = focused ? 'receipt-sharp':'receipt'
                             }else if(name ==='Plan'){
                                 icon = focused ? 'calendar-sharp':'calendar'
@@ -37,7 +37,7 @@ export default function RootNavigator() {
                     })}
                 >
                     <Tab.Screen name="Home" component={Home} options={{ headerShown: false }} />
-                    <Tab.Screen name="Bills" component={Bills} options={{ headerShown: false }} />
+                    <Tab.Screen name="Contacts" component={Bills} options={{ headerShown: false }} />
                     <Tab.Screen name="Plan" component={Plan} options={{ headerShown: false }} />
                     <Tab.Screen name="Coach" component={Coach} options={{ headerShown: false }} />
                     <Tab.Screen name="Wealth" component={Wealth} options={{ headerShown: false }} />

@@ -18,6 +18,7 @@ interface Section {
     title: string;
     data: ContactItem[];
 }
+
 const Alphabets = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
 export default function GetContacts() {
     const [contacts, setContacts] = useState<Section[]>([]);
@@ -32,7 +33,6 @@ export default function GetContacts() {
                 if (con) {
                     console.log("Contacts fetched feom the mobile is ", con);
                     const num = parsePhoneNumber(con[con.length - 1].phoneNumbers[0].number, 'IN');
-                    // console.log("number extrcted", num)
                     const numbers: any = [];
                     con.forEach(item1 => {
 
@@ -154,20 +154,16 @@ export default function GetContacts() {
                 viewPosition:0
             })
         }
-        console.log(`the index of the element received is =====${index}
-            
-            
-            `)
+        console.log(`the index of the element received is =====${index}`)
     }
-
-
 
     return (
         <>{
             loading ? ( <ActivityIndicator size={'large'} style={{
                 justifyContent:"center",
                 alignItems:"center"
-            }}/>):(
+            }}/>
+        ):(
                 <>
                 <View style={{
                     position: "absolute",
