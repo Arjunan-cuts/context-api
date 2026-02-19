@@ -8,6 +8,7 @@ interface state {
     name: string,
     number: number
 }
+
 interface ContactItem {
     name: string;
     number: string;
@@ -138,11 +139,9 @@ export default function GetContacts() {
                         </View>
                     </View>
                 </View>
-
             </>
         )
     }
-
     const findIndex = () => {
         const index = contacts.findIndex(i => i.title === char);
         if(Listref.current){
@@ -156,7 +155,6 @@ export default function GetContacts() {
         }
         console.log(`the index of the element received is =====${index}`)
     }
-
     return (
         <>{
             loading ? ( <ActivityIndicator size={'large'} style={{
@@ -219,7 +217,6 @@ export default function GetContacts() {
                 </>
             )
         }
-       
         </>
     )
 }
