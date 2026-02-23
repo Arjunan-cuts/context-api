@@ -1,52 +1,97 @@
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Text, View } from 'react-native';
-import { Header } from '../Components/Header';
-import { useContext } from 'react';
-import { lanContext } from '../Contexts/LangContext';
-import { useAppSelector } from '../Hooks/reduxHooks';
-
+import React from "react";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import DraggableFlatList from "react-native-draggable-flatlist";
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 export function Plan() {
-    const language=useAppSelector(state=>state.lang.lang);
+
+  const [data, setData] = React.useState([
+    { id: "1", title: "Item sample 1" },
+    { id: "2", title: "Item  saomple 2" },
+    { id: "3", title: "Item  sample 3" },
+    { id: "4", title: "Item  sample 4" },
+    { id: "5", title: "Item  sample 5" },
+    { id: "6", title: "Item  sample 6" },
+  ]);
+
+  const deleteItem = (id) => {
+    setData(prev => prev.filter(item => item.id !== id));
+  };
+
+  const renderRightActions = (id) => {
     return (
-        <>
+      <TouchableOpacity
+        style={styles.deleteBox}
+        onPress={() => deleteItem(id)}
+      >
+        <Text style={{ color: "white" }}>Delete</Text>
+      </TouchableOpacity>
+    );
+  };
 
-            <View style={{
-                flex: 1,
-                backgroundColor: "#E3FEFF",
-                paddingHorizontal: 10,
-                justifyContent: "center"
-            }}>
-                <View style={{
-                    // height: "90%",
-                    width: "100%",
-                    backgroundColor: "#ACF1C75C",
-                    padding:10
-                }}>
-                    <View>
-                        <Text style={{
-                            fontSize: 26,
-                            fontWeight: "700"
-                        }}>
-                            {language === 'en' ? ' Hi Welcome to Plan Page !!':'¡Bienvenido a Planificación!'}
-                           
-                        </Text>
-                    </View>
-                </View>
-                <View style={{
-                    // height: "90%",
-                    width: "100%",
-                    backgroundColor: "#FCDEF45C",
-                    padding:10
-                }}>
-                        <Text style={{
-                            fontSize: 20,
-                            fontWeight: "300"
-                        }}>
-                            {language === 'en' ? 'This is the Plan page where you can organize your schedules and goals.':'Esta es la página de planificación donde puedes organizar tus horarios y objetivos.'}
-                        </Text>
-                    </View>
+  const renderItem = ({ item, drag, isActive }) => {
 
-            </View>
-        </>
-    )
+    return (
+      <Swipeable renderRightActions={() => renderRightActions(item.id)}
+      friction={2}
+      rightThreshold={90}
+      >
+
+        <View style={[
+          styles.itemContainer,
+          isActive && { backgroundColor: "#eee" }
+        ]}>
+
+          <TouchableOpacity
+            onLongPress={drag}
+            style={styles.dragIcon}
+          >
+    <MaterialIcons name="drag-indicator" color="#000" size={24} />
+              </TouchableOpacity>
+
+          <Text style={styles.text}>
+            {item.title}
+          </Text>
+
+        </View>
+
+      </Swipeable>
+    );
+  };
+
+  return (
+    <DraggableFlatList
+      data={data}
+      keyExtractor={(item) => item.id}
+      renderItem={renderItem}
+      onDragEnd={({ data }) => setData(data)}
+    />
+  );
 }
+
+const styles = StyleSheet.create({
+
+  itemContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    backgroundColor: "white",
+    marginBottom: 5,
+  },
+
+  dragIcon: {
+    paddingHorizontal: 10
+  },
+
+  text: {
+    fontSize: 16,
+  },
+
+  deleteBox: {
+    backgroundColor: "red",
+    justifyContent: "center",
+    alignItems: "center",
+    minWidth:"30%"
+  },
+
+});
