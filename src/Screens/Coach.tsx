@@ -1,18 +1,21 @@
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FlatList, Image, Modal, Text, TouchableOpacity, View } from 'react-native';
-import { useAppSelector } from '../Hooks/reduxHooks';
 import YoutubeIframe, { getYoutubeMeta, YoutubeIframeRef } from "react-native-youtube-iframe";
 import { useEffect, useState, useRef, useCallback } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import DraggableFlatList, { ScaleDecorator } from 'react-native-draggable-flatlist';
+import Swipeable from 'react-native-gesture-handler/ReanimatedSwipeable';
 
 export function Coach() {
-    const language = useAppSelector(state => state.lang.lang);
-    const [playing, setPlaying] = useState(false);
     const [modalVisible, setModalVisible] = useState(false);
     const [selectedId, setSelectedId] = useState<any>('NMjhjrBIrG8');
-    const Videos = ['NMjhjrBIrG8', 'UY75MQte4RU', 'r6zFZQm0hcc','xbpuPCbRCWQ'];
+    const [videos, setVideos] = useState([
+        'NMjhjrBIrG8',
+        'UY75MQte4RU',
+        'r6zFZQm0hcc',
+        'xbpuPCbRCWQ'
+    ]);
     const [videometa, setVideometa] = useState<any>();
-
+    
     useEffect(() => {
         getYoutubeMeta(selectedId).then((data) => {
             setVideometa(data);
@@ -38,18 +41,19 @@ export function Coach() {
                         <VideoModal videoId={selectedId} onClose={() => setModalVisible(false)} videometa={videometa} />
                     }
                 </View>
-
                 <View style={{
                     flex: 1,
                     backgroundColor: "#030404",
                     paddingHorizontal: 10,
                     justifyContent: "center",
                 }}>
-                    <FlatList
-                        data={Videos}
-                        renderItem={({ item }) => (
-                            <VideoItem videoId={item} onPress={onVideopress} videometa={setVideometa} />)
+                    <DraggableFlatList
+                        data={videos}
+                        renderItem={({ item, drag, isActive }) => (
+                            <VideoItem videoId={item} onPress={onVideopress} videometa={setVideometa} drag={drag} isActive={isActive} />)
                         }
+                        keyExtractor={item => item}
+                        onDragEnd={({ data }) => { setVideos(data) }}
                     />
                 </View>
             </View>
@@ -57,9 +61,25 @@ export function Coach() {
     )
 }
 
-const VideoItem = ({ videoId, onPress, videometa }) => {
+const VideoItem = ({ videoId, onPress, videometa, isActive, drag }) => {
     const [meta, setMeta] = useState<any>();
-    const [width, setWidth]=useState(0)
+    const [width, setWidth] = useState(0);
+
+    const renderRightActions = () => {
+        return (
+          <TouchableOpacity
+            style={{
+                backgroundColor: "red",
+                justifyContent: "center",
+                alignItems: "center",
+                minWidth:"30%"
+            }}
+          >
+            <Text style={{ color: "white" }}>Delete</Text>
+          </TouchableOpacity>
+        );
+      };
+      
     useEffect(() => {
         getYoutubeMeta(videoId).then((data) => {
             setMeta(data);
@@ -69,58 +89,66 @@ const VideoItem = ({ videoId, onPress, videometa }) => {
         getVideoProgress(videoId).then((da) => {
             setWidth(da.time);
         });
-        
-
     }, [videoId])
     if (meta) {
         return (
             <>
-                <View style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    marginTop: 15,
-                    gap: 14
-                }}>
-                    <View style={{
-                        height: 95,
-                        width: 155,
-                        borderRadius: 10,
-                        overflow: "hidden"
-                    }}>
-                        <TouchableOpacity onPress={() => {
-                            onPress(videoId)
-                            videometa(meta);
-                        }}>
-                            <Image source={{ uri: meta.thumbnail_url }} style={{ height: "100%", width: "100%" }} />
-                        </TouchableOpacity>
-                        <View style={{
-                            height: 3,
-                            width: width>0 ? `${width}%` : `${0}%`,
-                            backgroundColor: "#FB0404",
-                            zIndex: 10,
-                            position: "absolute",
-                            bottom: 0
-                        }} />
-                    </View>
-
-                    <View style={{
+           <Swipeable renderRightActions={() => renderRightActions()}
+      friction={2}
+      rightThreshold={90}
+      >
+                <ScaleDecorator>
+                    <TouchableOpacity style={{
                         flex: 1,
-                        gap: 2
-                    }}>
-                        <Text style={{
-                            fontSize: 15,
-                            color: "#E5E3E3"
+                        flexDirection: "row",
+                        marginTop: 15,
+                        gap: 14
+                    }}
+                        onLongPress={drag}
+                        disabled={isActive}
+                    >
+                        <View style={{
+                            height: 95,
+                            width: 155,
+                            borderRadius: 10,
+                            overflow: "hidden"
                         }}>
-                            {meta.title}
-                        </Text>
-                        <Text style={{
-                            fontSize: 12,
-                            color: "#B4B0B0"
+                            <TouchableOpacity onPress={() => {
+                                onPress(videoId)
+                                videometa(meta);
+                            }}>
+                                <Image source={{ uri: meta.thumbnail_url }} style={{ height: "100%", width: "100%" }} />
+                            </TouchableOpacity>
+                            <View style={{
+                                height: 3,
+                                width: width > 0 ? `${width}%` : `${0}%`,
+                                backgroundColor: "#FB0404",
+                                zIndex: 10,
+                                position: "absolute",
+                                bottom: 0
+                            }} />
+                        </View>
+
+                        <View style={{
+                            flex: 1,
+                            gap: 2
                         }}>
-                            {meta.author_name}
-                        </Text>
-                    </View>
-                </View>
+                            <Text style={{
+                                fontSize: 15,
+                                color: "#E5E3E3"
+                            }}>
+                                {meta.title}
+                            </Text>
+                            <Text style={{
+                                fontSize: 12,
+                                color: "#B4B0B0"
+                            }}>
+                                {meta.author_name}
+                            </Text>
+                        </View>
+                    </TouchableOpacity>
+                </ScaleDecorator>
+                </Swipeable>
             </>
         )
     }
@@ -128,18 +156,18 @@ const VideoItem = ({ videoId, onPress, videometa }) => {
 
 const VideoModal = ({ videoId, onClose, videometa }: any) => {
     const Modalref = useRef<YoutubeIframeRef>(null);
-        const [width, setWidth] = useState(0);
+    const [width, setWidth] = useState(0);
     const [playing, setPlaying] = useState(false)
-    const ready=useRef(false);
+    const ready = useRef(false);
 
-     const getonReady = async () => {
+    const getonReady = async () => {
 
         console.log("PLAYER READY");
 
         const saved = await getVideoProgress(videoId);
 
-        if(saved?.time > 0){
-            console.log("Seeking to:", saved.time);
+        if (saved?.time > 0) {
+            console.log("Se to:", saved.time);
 
             Modalref.current?.seekTo(saved.time, true);
         }
@@ -147,27 +175,20 @@ const VideoModal = ({ videoId, onClose, videometa }: any) => {
         ready.current = true;
     };
 
-
-
     useEffect(() => {
-        console.log("Inside UseEffect of Saving current time",playing)
+        console.log("Inside UseEffect of Saving current time", playing)
         if (!ready.current) return;
         const timer = setInterval(() => {
-            
             Modalref.current?.getCurrentTime()?.then((data: any) => {
-    
                 SaveVideoProgress(Modalref, {
                     videoId,
                     timeStamp: data
                 });
             });
-    
-        }, 4000);   
-    
+        }, 4000);
         return () => clearInterval(timer);
-    
+
     }, [videoId]);
-    
 
     return (
         <View style={{
@@ -192,8 +213,8 @@ const VideoModal = ({ videoId, onClose, videometa }: any) => {
                         play={true}
                         width="100%"
                         onReady={getonReady}
-                        onStateChange={(state)=>{
-                            if(state=== "playing"){
+                        onStateChange={(state) => {
+                            if (state === "playing") {
                                 console.log("STATE:", state);
                                 setPlaying(true);
                                 console.log("the state changed to true")
@@ -272,7 +293,7 @@ const getVideoProgress = async (videoId) => {
     if (json !== null) {
         console.log("in retriving item", JSON.parse(json))
         return JSON.parse(json)
-    }else{
+    } else {
         console.log("possbly the getting is not stored");
     }
     return { Progress: 0, time: 0 };
